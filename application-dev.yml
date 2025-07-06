@@ -1,0 +1,23 @@
+# More detailed logging for development
+logging:
+  level:
+    root: INFO
+    org.springframework.web: DEBUG
+    org.springframework.security: DEBUG
+
+# Health endpoint details available for everyone in development
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+
+# Development CORS settings - more permissive
+cors:
+  allowed-origins: "*"
+
+# Enable debug mode for development
+debug: true

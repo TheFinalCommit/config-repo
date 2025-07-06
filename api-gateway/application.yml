@@ -1,0 +1,14 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: api-gateway
+
+# Logging configuration
+logging:
+  level:
+    com.example.apigateway: INFO
+    org.springframework.security: WARN
+    org.springframework.cloud.netflix.eureka: INFO
+

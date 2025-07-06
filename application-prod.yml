@@ -1,0 +1,20 @@
+logging:
+  level:
+    root: WARN
+    org.springframework.web: INFO
+    org.springframework.security: WARN
+
+# Common management endpoints configuration
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: when_authorized
+
+# More restrictive CORS for production
+cors:
+  allowed-origins: ${CORS_ALLOWED_ORIGINS:https://example.com}
+  allow-credentials: true
