@@ -6,11 +6,46 @@ This directory is a **Git submodule** that contains all centralized and external
 
 ---
 
+## 🚨 SECURITY WARNING
+
+**⚠️ IMPORTANT: Before deploying to production, you MUST configure the following environment variables:**
+
+This repository contains placeholder values (`changeme`) for sensitive configuration. These are **NOT SECURE** and must be replaced with proper values in production:
+
+### Required Environment Variables:
+```bash
+# Auth Service
+export AUTH_SERVICE_USERNAME="your-secure-username"
+export AUTH_SERVICE_PASSWORD="your-secure-password"
+export OAUTH2_CLIENT_SECRET="your-secure-client-secret"
+export OAUTH2_ISSUER_URI="https://your-domain.com/auth"
+
+# Config Server (if security enabled)
+export CONFIG_SERVER_USERNAME="config-admin"
+export CONFIG_SERVER_PASSWORD="your-secure-config-password"
+export CONFIG_SECURITY_ENABLED="true"
+
+# Production URLs
+export EUREKA_DEFAULT_ZONE="https://discovery.your-domain.com/eureka/"
+export CORS_ALLOWED_ORIGINS="https://your-frontend-domain.com"
+```
+
+### Security Checklist:
+- [ ] Replace all `changeme` values with strong, unique passwords
+- [ ] Use environment variables for all sensitive values
+- [ ] Enable HTTPS in production
+- [ ] Configure proper CORS origins
+- [ ] Enable authentication on config server
+- [ ] Consider using Spring Cloud Config encryption (see below)
+
+---
+
 ## 📋 Table of Contents
 
 - [🏛️ How It Works](#-how-it-works)
 - [🚀 Getting Started](#-getting-started)
 - [📁 Repository Structure](#-repository-structure)
+- [🔒 Spring Cloud Config Encryption](#-spring-cloud-config-encryption)
 - [📝 Best Practices](#-best-practices)
 
 ---
@@ -55,16 +90,95 @@ config-repo/
 └── ... (other services)
 ```
 
-### Configuration Hierarchy
+## 🔒 Spring Cloud Config Encryption
 
-Spring Cloud Config resolves properties in a specific priority order (from lowest to highest):
+For production environments, consider encrypting sensitive values using Spring Cloud Config's built-in encryption features:
 
-1.  `application.yml`
-2.  `application-{profile}.yml`
-3.  `{service-name}/application.yml`
-4.  `{service-name}/application-{profile}.yml` (**highest priority**)
+### Setup Encryption Key
 
-This allows you to set global defaults and override them for specific services or environments as needed.
+1. **Generate a symmetric encryption key:**
+   ```bash
+   # Generate a random 256-bit key
+   openssl rand -hex 32
+   ```
+
+2. **Configure the config server with encryption key:**
+   ```yaml
+   # config-server/src/main/resources/application.yml
+   encrypt:
+     key: ${ENCRYPT_KEY:your-generated-key-here}
+   ```
+
+3. **Set environment variable:**
+   ```bash
+   export ENCRYPT_KEY="your-generated-256-bit-key"
+   ```
+
+### Encrypt Sensitive Values
+
+1. **Use the config server's encrypt endpoint:**
+   ```bash
+   # Encrypt a password
+   curl -X POST http://localhost:8888/encrypt \
+     -H "Content-Type: text/plain" \
+     -d "my-secret-password"
+   
+   # Returns: AQA...encrypted-value...==
+   ```
+
+2. **Use encrypted values in configuration:**
+   ```yaml
+   # Instead of:
+   password: changeme
+   
+   # Use:
+   password: '{cipher}AQA...encrypted-value...=='
+   ```
+
+### Example Encrypted Configuration
+
+```yaml
+spring:
+  security:
+    user:
+      name: ${AUTH_SERVICE_USERNAME:user}
+      password: '{cipher}AQB8n2gF7...encrypted-password...='
+    oauth2:
+      client:
+        registration:
+          oidc-client:
+            client-secret: '{cipher}AQC2m9kL1...encrypted-secret...='
+```
+
+### Asymmetric Encryption (Recommended for Production)
+
+For enhanced security, use RSA key pairs:
+
+1. **Generate RSA key pair:**
+   ```bash
+   # Generate private key
+   openssl genrsa -out config-server.pem 2048
+   
+   # Extract public key
+   openssl rsa -in config-server.pem -pubout -out config-server.pub
+   ```
+
+2. **Configure config server:**
+   ```yaml
+   encrypt:
+     key-store:
+       location: classpath:config-server.jks
+       password: ${KEYSTORE_PASSWORD}
+       alias: config-server-key
+       secret: ${KEY_SECRET}
+   ```
+
+### Benefits of Encryption
+
+- **At-rest security**: Sensitive values are encrypted in Git
+- **Automatic decryption**: Config server decrypts values before serving to clients
+- **Key rotation**: Change encryption keys without updating all config files
+- **Audit trail**: Git history shows when encrypted values changed (but not the actual values)
 
 ---
 
