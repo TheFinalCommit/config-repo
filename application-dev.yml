@@ -1,7 +1,5 @@
 # Development environment configuration
-spring:
-  profiles:
-    active: dev
+# Note: spring.profiles.active should not be set in profile-specific files
 
 # More detailed logging for development
 logging:
@@ -28,22 +26,3 @@ cors:
 
 # Enable debug mode for development
 debug: true
-
-# More lenient resilience settings for development
-resilience4j:
-  circuitbreaker:
-    configs:
-      default:
-        failure-rate-threshold: 70
-        wait-duration-in-open-state: 10s
-        sliding-window-size: 5
-        minimum-number-of-calls: 3
-  retry:
-    configs:
-      default:
-        max-attempts: 2
-        wait-duration: 500ms
-  timelimiter:
-    configs:
-      default:
-        timeout-duration: 10s

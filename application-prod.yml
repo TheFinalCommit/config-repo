@@ -1,6 +1,5 @@
-spring:
-  profiles:
-    active: prod
+# Production environment configuration
+# Note: spring.profiles.active should not be set in profile-specific files
 
 # Production logging - less verbose, focused on errors and warnings
 logging:
@@ -19,7 +18,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: health,info,metrics,circuitbreakers
+        include: health,info,metrics
   endpoint:
     health:
       show-details: never
