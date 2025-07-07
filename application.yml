@@ -23,7 +23,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: health,info,metrics,env,circuitbreakers,retries
+        include: health,info,metrics,env,retries
   endpoint:
     health:
       show-details: when-authorized
