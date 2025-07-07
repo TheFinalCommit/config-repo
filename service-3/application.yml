@@ -1,0 +1,12 @@
+server:
+  port: 8084
+
+spring:
+  application:
+    name: service-3
+
+logging:
+  level:
+    com.example.service3: INFO
+    org.springframework.security: WARN
+    org.springframework.cloud.netflix.eureka: INFO

@@ -1,0 +1,11 @@
+# Enhanced logging for development debugging
+logging:
+  level:
+    com.netflix.eureka: DEBUG
+    com.netflix.discovery: DEBUG
+    org.springframework.cloud.netflix.eureka: DEBUG
+    org.springframework.web: DEBUG
+    org.springframework.cloud.gateway: DEBUG
+    org.springframework.cloud.security: DEBUG
+    org.springframework.cloud.config: DEBUG
+    com.example.loggingservice: DEBUG

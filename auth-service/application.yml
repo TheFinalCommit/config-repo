@@ -1,0 +1,25 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: auth-service
+  security:
+    user:
+      name: ${AUTH_SERVICE_USERNAME:user}
+      password: ${AUTH_SERVICE_PASSWORD:changeme}
+      roles: USER,ADMIN
+    oauth2: # OAuth2 Authorization Server settings
+      authorizationserver:
+        issuer: ${OAUTH2_ISSUER_URI:http://localhost:8081/}
+
+# Default OAuth2 client for testing
+oauth2:
+  client:
+    registration:
+      oidc-client:
+        client-id: ${OAUTH2_CLIENT_ID:oidc-client}
+        client-secret: ${OAUTH2_CLIENT_SECRET:changeme}
+        authorization-grant-type: authorization_code,refresh_token
+        redirect-uri: ${OAUTH2_REDIRECT_URI:http://127.0.0.1:8081/login/oauth2/code/oidc-client}
+        scope: openid,profile
