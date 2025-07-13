@@ -4,6 +4,72 @@ server:
 spring:
   application:
     name: api-gateway
+  # Centralized Gateway Routes Configuration
+  cloud:
+    gateway:
+      routes:
+        # Auth Service Routes
+        - id: auth-service
+          uri: lb://auth-service
+          predicates:
+            - Path=/auth/**
+          filters:
+            - StripPrefix=1
+
+        # Business Service Routes
+        - id: service-1
+          uri: lb://service-1
+          predicates:
+            - Path=/api/v1/service1/**
+          filters:
+            - StripPrefix=3
+
+        - id: service-2
+          uri: lb://service-2
+          predicates:
+            - Path=/api/v1/service2/**
+          filters:
+            - StripPrefix=3
+
+        - id: service-3
+          uri: lb://service-3
+          predicates:
+            - Path=/api/v1/service3/**
+          filters:
+            - StripPrefix=3
+
+        # Infrastructure Service Routes
+        - id: logging-service
+          uri: lb://logging-service
+          predicates:
+            - Path=/logs/**
+          filters:
+            - StripPrefix=1
+
+        - id: messaging-service
+          uri: lb://messaging-service
+          predicates:
+            - Path=/messaging/**
+          filters:
+            - StripPrefix=1
+
+        # Discovery Service Route (for dashboard access)
+        - id: discovery-service
+          uri: lb://discovery-service
+          predicates:
+            - Path=/eureka/**
+          filters:
+            - StripPrefix=1
+
+      # Global Gateway Configuration
+      globals:
+        cors-configurations:
+          '[/**]':
+            allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:3000,http://localhost:3001}
+            allowed-methods: ${CORS_ALLOWED_METHODS:GET,POST,PUT,DELETE,OPTIONS}
+            allowed-headers: ${CORS_ALLOWED_HEADERS:*}
+            allow-credentials: ${CORS_ALLOW_CREDENTIALS:true}
+            max-age: ${CORS_MAX_AGE:3600}
 
 # Logging configuration
 logging:
@@ -11,4 +77,4 @@ logging:
     com.example.apigateway: INFO
     org.springframework.security: WARN
     org.springframework.cloud.netflix.eureka: INFO
-
+    org.springframework.cloud.gateway: DEBUG
