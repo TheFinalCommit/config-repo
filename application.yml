@@ -32,10 +32,10 @@ management:
       enabled: true
     retries:
       enabled: true
-  # Added for better observability
-  metrics:
-    export:
-      prometheus:
+  # Fixed deprecated prometheus configuration
+  prometheus:
+    metrics:
+      export:
         enabled: ${PROMETHEUS_ENABLED:false}
   tracing:
     sampling:
