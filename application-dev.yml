@@ -1,4 +1,4 @@
-# More detailed logging for development
+# Development environment overrides
 logging:
   level:
     root: INFO
@@ -17,15 +17,15 @@ management:
     health:
       show-details: always
 
-# Development CORS settings - more permissive
+# Development CORS settings - use environment variables
 cors:
-  allowed-origins: "http://localhost:3000,http://localhost:8080,http://localhost:3001"
+  allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:3000,http://localhost:8080,http://localhost:3001}
 
 # Relaxed resilience settings for development
 resilience4j:
   circuitbreaker:
     configs:
       default:
-        failure-rate-threshold: 70  # More forgiving in dev
-        wait-duration-in-open-state: 10s  # Shorter wait in dev
-        sliding-window-size: 5  # Smaller window for faster feedback
+        failure-rate-threshold: 70
+        wait-duration-in-open-state: 10s
+        sliding-window-size: 5

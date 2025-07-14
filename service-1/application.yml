@@ -1,12 +1,6 @@
 server:
-  port: 8082
+  port: ${SERVER_PORT:8082}
 
 spring:
   application:
     name: service-1
-
-logging:
-  level:
-    com.example.service1: INFO
-    org.springframework.security: WARN
-    org.springframework.cloud.netflix.eureka: INFO

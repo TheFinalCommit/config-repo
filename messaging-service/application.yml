@@ -1,12 +1,6 @@
 server:
-  port: 8085
+  port: ${SERVER_PORT:8085}
 
 spring:
   application:
     name: messaging-service
-
-logging:
-  level:
-    com.example.messagingservice: INFO
-    org.springframework.security: WARN
-    org.springframework.cloud.netflix.eureka: INFO
