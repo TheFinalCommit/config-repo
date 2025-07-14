@@ -1,0 +1,28 @@
+# Service registry for API Gateway
+# This file defines which services should have public endpoints
+gateway:
+  services:
+    - name: auth-service
+      publicEndpoints:
+        - "/api/v*/auth/login"
+        - "/api/v*/public/**"
+        - "/public/**"
+    - name: service-1
+      publicEndpoints:
+        - "/api/v*/public/**"
+        - "/public/**"
+    - name: service-2
+      publicEndpoints:
+        - "/api/v*/public/**"
+        - "/public/**"
+    - name: service-3
+      publicEndpoints:
+        - "/api/v*/public/**"
+        - "/public/**"
+    - name: logging-service
+      publicEndpoints:
+        - "/api/v*/public/**"
+    - name: messaging-service
+      publicEndpoints:
+        - "/api/v*/public/**"
+
