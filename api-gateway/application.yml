@@ -6,59 +6,59 @@ spring:
     name: api-gateway
   cloud:
     gateway:
-      routes:
-        # Auth Service Routes
-        - id: auth-service
-          uri: lb://auth-service
-          predicates:
-            - Path=/auth/**
-          filters:
-            - StripPrefix=1
-
-        # Business Service Routes
-        - id: service-1
-          uri: lb://service-1
-          predicates:
-            - Path=/api/v1/service1/**
-          filters:
-            - StripPrefix=3
-
-        - id: service-2
-          uri: lb://service-2
-          predicates:
-            - Path=/api/v1/service2/**
-          filters:
-            - StripPrefix=3
-
-        - id: service-3
-          uri: lb://service-3
-          predicates:
-            - Path=/api/v1/service3/**
-          filters:
-            - StripPrefix=3
-
-        # Infrastructure Service Routes
-        - id: logging-service
-          uri: lb://logging-service
-          predicates:
-            - Path=/logs/**
-          filters:
-            - StripPrefix=1
-
-        - id: messaging-service
-          uri: lb://messaging-service
-          predicates:
-            - Path=/messaging/**
-          filters:
-            - StripPrefix=1
-
-        # Discovery Service Route
-        - id: discovery-service
-          uri: lb://discovery-service
-          predicates:
-            - Path=/eureka/**
-          filters:
-            - StripPrefix=1
+#      routes:
+#        # Auth Service Routes
+#        - id: auth-service
+#          uri: lb://auth-service
+#          predicates:
+#            - Path=/auth/**
+#          filters:
+#            - StripPrefix=1
+#
+#        # Business Service Routes
+#        - id: service-1
+#          uri: lb://service-1
+#          predicates:
+#            - Path=/api/v1/service1/**
+#          filters:
+#            - StripPrefix=3
+#
+#        - id: service-2
+#          uri: lb://service-2
+#          predicates:
+#            - Path=/api/v1/service2/**
+#          filters:
+#            - StripPrefix=3
+#
+#        - id: service-3
+#          uri: lb://service-3
+#          predicates:
+#            - Path=/api/v1/service3/**
+#          filters:
+#            - StripPrefix=3
+#
+#        # Infrastructure Service Routes
+#        - id: logging-service
+#          uri: lb://logging-service
+#          predicates:
+#            - Path=/logs/**
+#          filters:
+#            - StripPrefix=1
+#
+#        - id: messaging-service
+#          uri: lb://messaging-service
+#          predicates:
+#            - Path=/messaging/**
+#          filters:
+#            - StripPrefix=1
+#
+#        # Discovery Service Route
+#        - id: discovery-service
+#          uri: lb://discovery-service
+#          predicates:
+#            - Path=/eureka/**
+#          filters:
+#            - StripPrefix=1
 
       # Global Gateway Configuration
       globals:

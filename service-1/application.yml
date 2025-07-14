@@ -4,3 +4,5 @@ server:
 spring:
   application:
     name: service-1
+  config:
+    import: optional:configserver:${SPRING_CLOUD_CONFIG_URI:http://localhost:8888/}
