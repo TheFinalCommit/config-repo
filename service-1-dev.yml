@@ -1,4 +1,0 @@
-# Development overrides for service-1
-logging:
-  level:
-    com.example.service1: DEBUG

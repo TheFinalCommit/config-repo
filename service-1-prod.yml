@@ -1,5 +1,0 @@
-# Production overrides for service-1
-logging:
-  level:
-    com.example.service1: INFO
-
