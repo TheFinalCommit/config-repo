@@ -1,5 +1,5 @@
+# Production overrides for logging service
 logging:
   level:
-    root: WARN
-    org.springframework.web: INFO
-    org.springframework.security: WARN
+    com.example.loggingservice: INFO
+

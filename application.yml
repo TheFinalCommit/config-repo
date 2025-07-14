@@ -32,6 +32,14 @@ management:
       enabled: true
     retries:
       enabled: true
+  # Added for better observability
+  metrics:
+    export:
+      prometheus:
+        enabled: ${PROMETHEUS_ENABLED:false}
+  tracing:
+    sampling:
+      probability: ${TRACING_SAMPLING_PROBABILITY:0.1}
 
 # Resilience4j Default Configuration (services can override as needed)
 resilience4j:
@@ -79,3 +87,21 @@ logging:
     root: INFO
     org.springframework.web: INFO
     org.springframework.security: INFO
+  pattern:
+    console: "${LOGGING_PATTERN_CONSOLE:%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}}"
+    file: "${LOGGING_PATTERN_FILE:%d{yyyy-MM-dd HH:mm:ss.SSS} ${LOG_LEVEL_PATTERN:-%5p} ${PID:- } --- [%t] %-40.40logger{39} : %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}}"
+
+# Database configuration template (services can override)
+spring.datasource:
+  url: ${DATABASE_URL:jdbc:h2:mem:testdb}
+  username: ${DATABASE_USERNAME:sa}
+  password: ${DATABASE_PASSWORD:}
+  driver-class-name: ${DATABASE_DRIVER:org.h2.Driver}
+
+spring.jpa:
+  hibernate:
+    ddl-auto: ${JPA_DDL_AUTO:update}
+  show-sql: ${JPA_SHOW_SQL:false}
+  properties:
+    hibernate:
+      dialect: ${JPA_DIALECT:org.hibernate.dialect.H2Dialect}

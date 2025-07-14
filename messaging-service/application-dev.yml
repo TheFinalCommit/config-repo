@@ -1,32 +1,5 @@
-# Enhanced logging for development
+# Development overrides for messaging service
 logging:
   level:
-    root: DEBUG
-    org.springframework.cloud.gateway: DEBUG
-    org.springframework.cloud.security: DEBUG
-    org.springframework.cloud.config: DEBUG
-    org.springframework.web: DEBUG
     com.example.messagingservice: DEBUG
 
-# Health endpoint details available for everyone in development
-management:
-  endpoints:
-    web:
-      exposure:
-        include: "*"
-  endpoint:
-    health:
-      show-details: always
-
-# Development CORS settings - more permissive
-cors:
-  allowed-origins: "http://localhost:3000,http://localhost:8080,http://localhost:3001"
-
-# Relaxed resilience settings for development
-resilience4j:
-  circuitbreaker:
-    configs:
-      default:
-        failure-rate-threshold: 70  # More forgiving in dev
-        wait-duration-in-open-state: 10s  # Shorter wait in dev
-        sliding-window-size: 5  # Smaller window for faster feedback

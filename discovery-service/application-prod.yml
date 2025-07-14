@@ -1,5 +1,4 @@
 logging:
   level:
-    root: WARN
-    org.springframework.web: INFO
-    org.springframework.security: WARN
+    com.netflix.eureka: WARN
+    com.netflix.discovery: WARN

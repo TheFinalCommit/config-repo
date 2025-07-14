@@ -1,5 +1,5 @@
+# Production overrides for service-2
 logging:
   level:
-    root: WARN
-    org.springframework.web: INFO
-    org.springframework.security: WARN
+    com.example.service2: INFO
+
