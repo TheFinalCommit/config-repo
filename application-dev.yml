@@ -6,6 +6,13 @@ logging:
     org.springframework.security: DEBUG
     com.example: DEBUG
     io.github.resilience4j: DEBUG
+  file:
+    name: "${LOGGING_FILE_PATH:./logs}/${spring.application.name:application}.log"
+  logback:
+    rollingpolicy:
+      max-file-size: "50MB"
+      max-history: 7  # Keep logs for 7 days in dev
+      total-size-cap: "500MB"
 
 # Health endpoint details available for everyone in development
 management:
