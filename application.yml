@@ -23,14 +23,31 @@ spring:
     date-format: yyyy-MM-dd HH:mm:ss
     serialization:
       write-dates-as-timestamps: false
-      
-  # Shared infrastructure configuration used by all services
-  redis:
-    host: ${REDIS_HOST:localhost}
-    port: ${REDIS_PORT:6379}
-    # Shared secret from secret/shared/redis/password
-    password: ${vault.secret.shared.redis.password}
-    
+
+# Logging configuration to reduce connection noise
+logging:
+  level:
+    # Reduce Tomcat connection handling noise (EOF exceptions)
+    org.apache.coyote.http11.Http11Processor: INFO
+    org.apache.tomcat.util.net: INFO
+    # Keep Spring Security at reasonable level
+    org.springframework.security: INFO
+    # Keep other levels at INFO unless debugging needed
+    org.springframework.web: INFO
+    root: INFO
+
+# Tomcat server configuration to reduce connection issues
+server:
+  tomcat:
+    # Connection pool settings to handle health check connections better
+    max-connections: 8192
+    accept-count: 100
+    max-threads: 200
+    # Timeout settings to handle connection drops gracefully
+    connection-timeout: 20000
+    keep-alive-timeout: 20000
+    max-keep-alive-requests: 100
+
   # Example shared external API configuration
   external-api:
     base-url: ${EXTERNAL_API_URL:https://api.example.com}
