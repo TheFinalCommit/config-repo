@@ -4,10 +4,9 @@ server:
 spring:
   application:
     name: auth-service
+  # Auth service security credentials automatically resolved from Vault: secret/auth-service/security/
   security:
     user:
-      name: ${AUTH_SERVICE_USERNAME:user}
-      password: ${AUTH_SERVICE_PASSWORD:changeme}
       roles: USER,ADMIN
     oauth2:
       authorizationserver:
