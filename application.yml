@@ -1,5 +1,19 @@
 # Global configuration shared by all services
 spring:
+  cloud:
+    vault:
+      enabled: true
+      host: ${SPRING_CLOUD_VAULT_HOST:vault}
+      port: ${SPRING_CLOUD_VAULT_PORT:8200}
+      scheme: ${SPRING_CLOUD_VAULT_SCHEME:http}
+      authentication: TOKEN
+      token: ${SPRING_CLOUD_VAULT_TOKEN:myroot}
+      kv:
+        enabled: true
+        backend: secret
+        # default-context will be the application name (service-1, service-2, etc.)
+        # This automatically maps to vault paths like: secret/service-1/, secret/auth-service/
+        profiles-separator: '/'
   security:
     oauth2:
       resourceserver:
@@ -9,6 +23,19 @@ spring:
     date-format: yyyy-MM-dd HH:mm:ss
     serialization:
       write-dates-as-timestamps: false
+      
+  # Shared infrastructure configuration used by all services
+  redis:
+    host: ${REDIS_HOST:localhost}
+    port: ${REDIS_PORT:6379}
+    # Shared secret from secret/shared/redis/password
+    password: ${vault.secret.shared.redis.password}
+    
+  # Example shared external API configuration
+  external-api:
+    base-url: ${EXTERNAL_API_URL:https://api.example.com}
+    # Shared API key from secret/shared/api/key
+    api-key: ${vault.secret.shared.api.key}
 
 # Common Eureka client configuration
 eureka:
