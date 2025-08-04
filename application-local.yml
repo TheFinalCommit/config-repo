@@ -1,0 +1,25 @@
+# Local profile overrides - for running locally without Docker
+spring:
+  cloud:
+    vault:
+      enabled: false  # Disable Vault completely for local development
+  autoconfigure:
+    exclude:
+      - org.springframework.cloud.vault.config.VaultAutoConfiguration
+      - org.springframework.cloud.vault.config.VaultBootstrapConfiguration
+
+# Expose all actuator endpoints for local debugging
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+
+# Debug logging for local development
+logging:
+  level:
+    org.springframework.cloud: DEBUG
+    org.springframework.security: DEBUG
