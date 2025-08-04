@@ -13,9 +13,3 @@ management:
   endpoint:
     health:
       show-details: always
-
-# Enable debug logging for development
-logging:
-  level:
-    org.springframework.cloud: DEBUG
-    org.springframework.security: DEBUG
