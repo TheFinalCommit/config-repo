@@ -1,25 +1,10 @@
 # Development environment overrides
 spring:
   cloud:
-    # Disable Vault for development - use local configs and property files only
     vault:
-      enabled: false
-    config:
-      # Make config server optional in development
-      fail-fast: false
-      retry:
-        max-attempts: 3
-        initial-interval: 1000
+      enabled: false  # Disable Vault in dev - use local configs
 
-logging:
-  level:
-    root: INFO
-    org.springframework.web: DEBUG
-    org.springframework.security: DEBUG
-    com.example: DEBUG
-    io.github.resilience4j: DEBUG
-
-# Health endpoint details available for everyone in development
+# Expose all actuator endpoints for debugging in development
 management:
   endpoints:
     web:
@@ -29,15 +14,8 @@ management:
     health:
       show-details: always
 
-# Development CORS settings - use environment variables
-cors:
-  allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:3000,http://localhost:8080,http://localhost:3001}
-
-# Relaxed resilience settings for development
-resilience4j:
-  circuitbreaker:
-    configs:
-      default:
-        failure-rate-threshold: 70
-        wait-duration-in-open-state: 10s
-        sliding-window-size: 5
+# Enable debug logging for development
+logging:
+  level:
+    org.springframework.cloud: DEBUG
+    org.springframework.security: DEBUG

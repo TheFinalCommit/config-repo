@@ -2,140 +2,22 @@
 spring:
   cloud:
     vault:
-      enabled: true
+      enabled: ${VAULT_ENABLED:false}
       host: ${SPRING_CLOUD_VAULT_HOST:vault}
       port: ${SPRING_CLOUD_VAULT_PORT:8200}
       scheme: ${SPRING_CLOUD_VAULT_SCHEME:http}
       authentication: TOKEN
       token: ${SPRING_CLOUD_VAULT_TOKEN:myroot}
-      kv:
-        enabled: true
-        backend: secret
-        # default-context will be the application name (service-1, service-2, etc.)
-        # This automatically maps to vault paths like: secret/service-1/, secret/auth-service/
-        profiles-separator: '/'
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          issuer-uri: ${OAUTH2_ISSUER_URI:http://localhost:8081/}
-  jackson:
-    date-format: yyyy-MM-dd HH:mm:ss
-    serialization:
-      write-dates-as-timestamps: false
-
-# Logging configuration to reduce connection noise
-logging:
-  level:
-    # Reduce Tomcat connection handling noise (EOF exceptions)
-    org.apache.coyote.http11.Http11Processor: INFO
-    org.apache.tomcat.util.net: INFO
-    # Keep Spring Security at reasonable level
-    org.springframework.security: INFO
-    # Keep other levels at INFO unless debugging needed
-    org.springframework.web: INFO
-    root: INFO
-
-# Tomcat server configuration to reduce connection issues
-server:
-  tomcat:
-    # Connection pool settings to handle health check connections better
-    max-connections: 8192
-    accept-count: 100
-    max-threads: 200
-    # Timeout settings to handle connection drops gracefully
-    connection-timeout: 20000
-    keep-alive-timeout: 20000
-    max-keep-alive-requests: 100
-
-  # Example shared external API configuration
-  external-api:
-    base-url: ${EXTERNAL_API_URL:https://api.example.com}
-    # Shared API key from secret/shared/api/key
-    api-key: ${vault.secret.shared.api.key}
 
 # Common Eureka client configuration
 eureka:
   client:
     serviceUrl:
       defaultZone: ${EUREKA_DEFAULT_ZONE:http://localhost:8761/eureka/}
-    healthcheck:
-      enabled: true
 
-# Actuator configuration for monitoring
+# Basic actuator endpoints
 management:
   endpoints:
     web:
       exposure:
-        include: health,info,metrics,gateway
-  endpoint:
-    health:
-      show-details: when-authorized
-  health:
-    circuitbreakers:
-      enabled: true
-    retries:
-      enabled: true
-  # Fixed deprecated prometheus configuration
-  prometheus:
-    metrics:
-      export:
-        enabled: ${PROMETHEUS_ENABLED:false}
-  tracing:
-    sampling:
-      probability: ${TRACING_SAMPLING_PROBABILITY:0.1}
-
-# Resilience4j Default Configuration (services can override as needed)
-resilience4j:
-  circuitbreaker:
-    configs:
-      default:
-        failure-rate-threshold: 50
-        wait-duration-in-open-state: 30s
-        sliding-window-size: 10
-        minimum-number-of-calls: 5
-        permitted-number-of-calls-in-half-open-state: 3
-        automatic-transition-from-open-to-half-open-enabled: true
-        record-exceptions:
-          - java.net.ConnectException
-          - java.util.concurrent.TimeoutException
-          - org.springframework.web.client.ResourceAccessException
-
-  retry:
-    configs:
-      default:
-        max-attempts: 3
-        wait-duration: 1s
-        exponential-backoff-multiplier: 2
-        retry-exceptions:
-          - java.net.ConnectException
-          - java.util.concurrent.TimeoutException
-          - org.springframework.web.client.ResourceAccessException
-
-  timelimiter:
-    configs:
-      default:
-        timeout-duration: 3s
-        cancel-running-future: true
-
-# Common CORS configuration
-cors:
-  allowed-methods: ${CORS_ALLOWED_METHODS:GET,POST,PUT,DELETE,OPTIONS}
-  allowed-headers: ${CORS_ALLOWED_HEADERS:*}
-  allow-credentials: ${CORS_ALLOW_CREDENTIALS:true}
-  max-age: ${CORS_MAX_AGE:3600}
-
-# Database configuration template (services can override)
-spring.datasource:
-  url: ${DATABASE_URL:jdbc:h2:mem:testdb}
-  username: ${DATABASE_USERNAME:sa}
-  password: ${DATABASE_PASSWORD:}
-  driver-class-name: ${DATABASE_DRIVER:org.h2.Driver}
-
-spring.jpa:
-  hibernate:
-    ddl-auto: ${JPA_DDL_AUTO:update}
-  show-sql: ${JPA_SHOW_SQL:false}
-  properties:
-    hibernate:
-      dialect: ${JPA_DIALECT:org.hibernate.dialect.H2Dialect}
+        include: health,info
