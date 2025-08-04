@@ -1,5 +1,8 @@
 # Global configuration shared by all services
 spring:
+  cloud:
+    vault:
+      enabled: false
   security:
     oauth2:
       resourceserver:
