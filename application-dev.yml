@@ -2,7 +2,12 @@
 spring:
   cloud:
     vault:
-      enabled: false  # Disable Vault in dev - use local configs
+      enabled: true  # Enable Vault in production
+      host: ${SPRING_CLOUD_VAULT_HOST:vault}
+      port: ${SPRING_CLOUD_VAULT_PORT:8200}
+      scheme: ${SPRING_CLOUD_VAULT_SCHEME:http}
+      authentication: TOKEN
+      token: ${SPRING_CLOUD_VAULT_TOKEN:myroot}
 
 # Expose all actuator endpoints for debugging in development
 management:
@@ -13,3 +18,9 @@ management:
   endpoint:
     health:
       show-details: always
+
+# Enable debug logging for development
+logging:
+  level:
+    org.springframework.cloud: DEBUG
+    org.springframework.security: DEBUG
