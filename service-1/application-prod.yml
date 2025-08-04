@@ -3,5 +3,4 @@ spring:
   datasource:
     url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/service1db}
     username: ${DATABASE_USERNAME:service1user}
-    password: ${vault.secret.service-1.db.password}
 

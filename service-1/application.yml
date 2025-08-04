@@ -6,9 +6,5 @@ spring:
     name: service-1
   config:
     import: optional:configserver:${SPRING_CLOUD_CONFIG_URI:http://localhost:8888/}
-  
-  # Only service-1 specific configuration here
-  # Example: if service-1 needs its own database
-  # Username and password automatically resolved from Vault: secret/service-1/db/
   datasource:
     url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/service1db}

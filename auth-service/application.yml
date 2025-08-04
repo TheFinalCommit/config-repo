@@ -4,7 +4,6 @@ server:
 spring:
   application:
     name: auth-service
-  # Auth service security credentials automatically resolved from Vault: secret/auth-service/security/
   security:
     user:
       roles: USER,ADMIN

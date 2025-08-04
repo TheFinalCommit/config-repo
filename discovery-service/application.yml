@@ -8,7 +8,6 @@ spring:
 # Core Eureka server configuration
 eureka:
   client:
-    # Discovery service doesn't register with itself
     register-with-eureka: false
     fetch-registry: false
     service-url:

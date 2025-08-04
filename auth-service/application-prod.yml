@@ -9,5 +9,3 @@ spring:
   datasource:
     url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/authdb}
     username: ${DATABASE_USERNAME:authuser}
-    # Password from vault:secret/auth-service/db:password
-    password: ${vault.secret.auth-service.db.password}
