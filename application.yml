@@ -1,5 +1,9 @@
 # Global configuration shared by all services
 spring:
+  autoconfigure:
+    exclude:
+      - org.springframework.cloud.vault.config.VaultAutoConfiguration
+      - org.springframework.cloud.vault.config.VaultBootstrapConfiguration
   cloud:
     vault:
       enabled: false

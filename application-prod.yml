@@ -1,5 +1,7 @@
 # Production environment overrides
 spring:
+  autoconfigure:
+    exclude: []  # Override global exclusions - enable Vault auto-configuration
   cloud:
     vault:
       enabled: true  # Enable Vault in production
