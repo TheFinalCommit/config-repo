@@ -1,0 +1,6 @@
+# Service-specific logging levels
+logging:
+  level:
+    root: DEBUG
+    org.springframework.security: DEBUG
+    com.example.authservice: DEBUG

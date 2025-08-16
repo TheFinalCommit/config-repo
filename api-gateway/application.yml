@@ -1,0 +1,18 @@
+server:
+  port: ${SERVER_PORT:8080}
+
+spring:
+  application:
+    name: api-gateway
+
+# Service registry for API Gateway - comma-separated string format
+gateway:
+  public-paths: "/actuator/health,/actuator/info,/auth-service/api/v*/auth/login,/auth-service/api/v*/public/**,/auth-service/public/**,/service-1/api/v*/public/**,/service-1/public/**,/service-2/api/v*/public/**,/service-2/public/**,/service-3/api/v*/public/**,/service-3/public/**,/logging-service/api/v*/public/**,/messaging-service/api/v*/public/**,/api/v*/auth/login,/api/v*/public/**,/public/**"
+
+  service-names:
+    - "auth-service"
+    - "service-1"
+    - "service-2"
+    - "service-3"
+    - "logging-service"
+    - "messaging-service"

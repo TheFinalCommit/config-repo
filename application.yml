@@ -1,0 +1,64 @@
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${OAUTH2_ISSUER_URI:http://localhost:8081/}
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: ${EUREKA_DEFAULT_ZONE:http://localhost:8761/eureka/}
+
+management:
+  endpoint:
+    prometheus:
+      enabled: true
+    health:
+      probes:
+        enabled: true   # Enable liveness/readiness
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+  info:
+    git:
+      mode: full
+  metrics:
+    tags:
+      application: ${spring.application.name}
+
+  lifecycle:
+    timeout-per-shutdown-phase: 30s
+
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui
+  # springdoc config above; removed misplaced health.probes (moved under management)
+
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,prometheus
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false
+
+# Application level defaults (override per profile as needed)
+app:
+  cors:
+    allowed-origins: http://localhost:3000
+  logging:
+    queue:
+      capacity: 2000

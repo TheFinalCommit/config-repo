@@ -1,0 +1,5 @@
+# Production overrides for messaging service
+logging:
+  level:
+    com.example.messagingservice: INFO
+

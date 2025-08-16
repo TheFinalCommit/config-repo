@@ -1,0 +1,5 @@
+# Production overrides for logging service
+logging:
+  level:
+    com.example.loggingservice: INFO
+

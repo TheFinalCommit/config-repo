@@ -1,0 +1,15 @@
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: never  # Hide details in production
+
+logging:
+  level:
+    org.springframework.cloud: WARN
+    org.springframework.security: WARN
+    org.apache.tomcat: WARN
+    org.apache.coyote: WARN

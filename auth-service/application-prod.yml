@@ -1,0 +1,11 @@
+# Production config for Auth Service with JWT secrets from Vault
+spring:
+  security:
+    oauth2:
+      authorization-server:
+        # JWT signing key from vault:secret/auth-service/jwt:signing-key
+        jwt:
+          signing-key: ${vault.secret.auth-service.jwt.signing-key}
+  datasource:
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/authdb}
+    username: ${DATABASE_USERNAME:authuser}

@@ -1,0 +1,5 @@
+# Development overrides for logging service
+logging:
+  level:
+    com.example.loggingservice: DEBUG
+

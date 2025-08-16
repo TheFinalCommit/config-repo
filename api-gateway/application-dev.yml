@@ -1,0 +1,8 @@
+# Enhanced logging for development
+logging:
+  level:
+    root: DEBUG
+    org.springframework.cloud.gateway: DEBUG
+    org.springframework.cloud.security: DEBUG
+    org.springframework.web: DEBUG
+    com.example.apigateway: DEBUG

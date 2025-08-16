@@ -1,0 +1,5 @@
+# Development overrides for service-3
+logging:
+  level:
+    com.example.service3: DEBUG
+

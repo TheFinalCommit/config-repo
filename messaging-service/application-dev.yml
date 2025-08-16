@@ -1,0 +1,5 @@
+# Development overrides for messaging service
+logging:
+  level:
+    com.example.messagingservice: DEBUG
+

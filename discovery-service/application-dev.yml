@@ -1,0 +1,6 @@
+# Development overrides for discovery service
+logging:
+  level:
+    com.netflix.eureka: DEBUG
+    com.netflix.discovery: DEBUG
+
