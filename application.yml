@@ -29,3 +29,11 @@ springdoc:
     enabled: true
     path: /swagger-ui
   # springdoc config above; removed misplaced health.probes (moved under management)
+
+# Application level defaults (override per profile as needed)
+app:
+  cors:
+    allowed-origins: http://localhost:3000
+  logging:
+    queue:
+      capacity: 2000
