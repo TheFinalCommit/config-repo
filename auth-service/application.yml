@@ -11,13 +11,13 @@ spring:
       authorizationserver:
         issuer: ${OAUTH2_ISSUER_URI:http://localhost:8081/}
 
-# OAuth2 client configuration for testing and reference
+# OAuth2 client configuration for testing and reference (DO NOT use in production; client-secret is a placeholder)
 oauth2:
   client:
     registration:
       oidc-client:
         client-id: ${OAUTH2_CLIENT_ID:oidc-client}
-        client-secret: ${OAUTH2_CLIENT_SECRET:changeme}
+        client-secret: ${OAUTH2_CLIENT_SECRET:changeme} # placeholder
         authorization-grant-type: authorization_code,refresh_token
         redirect-uri: ${OAUTH2_REDIRECT_URI:http://127.0.0.1:8081/login/oauth2/code/oidc-client}
         scope: ${OAUTH2_SCOPES:openid,profile}
