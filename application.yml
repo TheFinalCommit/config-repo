@@ -4,6 +4,16 @@ spring:
       resourceserver:
         jwt:
           issuer-uri: ${OAUTH2_ISSUER_URI:http://localhost:8081/}
+  
+  # RabbitMQ Configuration (shared across all services)
+  rabbitmq:
+    host: ${RABBITMQ_HOST:localhost}
+    port: ${RABBITMQ_PORT:5672}
+    username: ${RABBITMQ_USER:admin}
+    password: ${RABBITMQ_PASSWORD:secure_rabbit_password}
+    virtual-host: ${RABBITMQ_VHOST:/}
+    connection-timeout: 10s
+    requested-heartbeat: 30s
 
 eureka:
   client:
