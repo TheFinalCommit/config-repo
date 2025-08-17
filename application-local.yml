@@ -5,6 +5,7 @@ eureka:
   instance:
     hostname: localhost
     prefer-ip-address: false
+    ip-address: 127.0.0.1
 
 management:
   endpoints:
