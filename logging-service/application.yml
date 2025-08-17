@@ -5,3 +5,28 @@ spring:
   application:
     name: logging-service
 
+# Logging service configuration
+logging:
+  ingestion:
+    queue:
+      capacity: 5000
+    rate:
+      single:
+        permitsPerSecond: 200
+      batch:
+        permitsPerSecond: 50
+    drain:
+      interval:
+        ms: 2000
+  
+  export:
+    file:
+      directory: ./logs/aggregated
+      format: json  # Options: json, structured, text
+      rotation:
+        enabled: true
+        maxSizeMB: 100
+        maxFiles: 30
+      compression:
+        enabled: true
+
