@@ -3,3 +3,159 @@ logging:
     root: WARN
     org.springframework.web: INFO
     org.springframework.security: WARN
+
+spring:
+  cloud:
+    gateway:
+      routes:
+        # Auth Service Routes with strict rate limiting
+        - id: auth-login
+          uri: lb://auth-service
+          predicates:
+            - Path=/auth-service/api/v*/auth/login
+          filters:
+            - name: RequestRateLimiter
+              args:
+                redis-rate-limiter.replenishRate: 2
+                redis-rate-limiter.burstCapacity: 5
+                redis-rate-limiter.requestedTokens: 1
+                key-resolver: "#{@ipKeyResolver}"
+            - StripPrefix=1
+
+        - id: auth-service
+          uri: lb://auth-service
+          predicates:
+            - Path=/auth-service/**
+          filters:
+            - name: RequestRateLimiter
+              args:
+                redis-rate-limiter.replenishRate: 10
+                redis-rate-limiter.burstCapacity: 20
+                redis-rate-limiter.requestedTokens: 1
+                key-resolver: "#{@ipKeyResolver}"
+            - StripPrefix=1
+
+        # Admin Routes with very strict limits
+        - id: admin-routes
+          uri: lb://auth-service
+          predicates:
+            - Path=/admin/**
+          filters:
+            - name: RequestRateLimiter
+              args:
+                redis-rate-limiter.replenishRate: 1
+                redis-rate-limiter.burstCapacity: 3
+                redis-rate-limiter.requestedTokens: 1
+                key-resolver: "#{@userKeyResolver}"
+
+        # Service Routes with standard rate limiting
+        - id: service-1
+          uri: lb://service-1
+          predicates:
+            - Path=/service-1/**
+          filters:
+            - name: RequestRateLimiter
+              args:
+                redis-rate-limiter.replenishRate: 50
+                redis-rate-limiter.burstCapacity: 100
+                redis-rate-limiter.requestedTokens: 1
+                key-resolver: "#{@userKeyResolver}"
+            - StripPrefix=1
+
+        - id: service-2
+          uri: lb://service-2
+          predicates:
+            - Path=/service-2/**
+          filters:
+            - name: RequestRateLimiter
+              args:
+                redis-rate-limiter.replenishRate: 50
+                redis-rate-limiter.burstCapacity: 100
+                redis-rate-limiter.requestedTokens: 1
+                key-resolver: "#{@userKeyResolver}"
+            - StripPrefix=1
+
+        - id: service-3
+          uri: lb://service-3
+          predicates:
+            - Path=/service-3/**
+          filters:
+            - name: RequestRateLimiter
+              args:
+                redis-rate-limiter.replenishRate: 50
+                redis-rate-limiter.burstCapacity: 100
+                redis-rate-limiter.requestedTokens: 1
+                key-resolver: "#{@userKeyResolver}"
+            - StripPrefix=1
+
+        - id: logging-service
+          uri: lb://logging-service
+          predicates:
+            - Path=/logging-service/**
+          filters:
+            - name: RequestRateLimiter
+              args:
+                redis-rate-limiter.replenishRate: 30
+                redis-rate-limiter.burstCapacity: 60
+                redis-rate-limiter.requestedTokens: 1
+                key-resolver: "#{@userKeyResolver}"
+            - StripPrefix=1
+
+        - id: messaging-service
+          uri: lb://messaging-service
+          predicates:
+            - Path=/messaging-service/**
+          filters:
+            - name: RequestRateLimiter
+              args:
+                redis-rate-limiter.replenishRate: 40
+                redis-rate-limiter.burstCapacity: 80
+                redis-rate-limiter.requestedTokens: 1
+                key-resolver: "#{@userKeyResolver}"
+            - StripPrefix=1
+
+        # Public endpoints with conservative limits
+        - id: public-endpoints
+          uri: lb://service-1
+          predicates:
+            - Path=/api/v*/public/**
+          filters:
+            - name: RequestRateLimiter
+              args:
+                redis-rate-limiter.replenishRate: 10
+                redis-rate-limiter.burstCapacity: 20
+                redis-rate-limiter.requestedTokens: 1
+                key-resolver: "#{@ipKeyResolver}"
+
+      # Global filters for all routes
+      default-filters:
+        - name: Retry
+          args:
+            retries: 3
+            statuses: BAD_GATEWAY,GATEWAY_TIMEOUT
+            backoff:
+              firstBackoff: 50ms
+              maxBackoff: 500ms
+        - name: CircuitBreaker
+          args:
+            name: default
+            fallbackUri: forward:/fallback
+        - AddResponseHeader=X-Response-Time, ${response.time}ms
+
+  # Redis configuration for rate limiting
+  redis:
+    host: ${REDIS_HOST:localhost}
+    port: ${REDIS_PORT:6379}
+    password: ${REDIS_PASSWORD:}
+    database: 0
+    timeout: 2000ms
+    lettuce:
+      pool:
+        max-active: 10
+        max-idle: 10
+        min-idle: 1
+
+# Rate limiting configuration
+app:
+  rate-limiting:
+    enabled: true
