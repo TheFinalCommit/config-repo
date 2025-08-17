@@ -1,0 +1,62 @@
+# Rate limiting is disabled for local development
+app:
+  rate-limiting:
+    enabled: false
+
+spring:
+  cloud:
+    gateway:
+      routes:
+        # Simple routes without rate limiting for local development
+        - id: auth-service
+          uri: lb://auth-service
+          predicates:
+            - Path=/auth-service/**
+          filters:
+            - StripPrefix=1
+
+        - id: service-1
+          uri: lb://service-1
+          predicates:
+            - Path=/service-1/**
+          filters:
+            - StripPrefix=1
+
+        - id: service-2
+          uri: lb://service-2
+          predicates:
+            - Path=/service-2/**
+          filters:
+            - StripPrefix=1
+
+        - id: service-3
+          uri: lb://service-3
+          predicates:
+            - Path=/service-3/**
+          filters:
+            - StripPrefix=1
+
+        - id: logging-service
+          uri: lb://logging-service
+          predicates:
+            - Path=/logging-service/**
+          filters:
+            - StripPrefix=1
+
+        - id: messaging-service
+          uri: lb://messaging-service
+          predicates:
+            - Path=/messaging-service/**
+          filters:
+            - StripPrefix=1
+
+      # Basic global filters for local development
+      default-filters:
+        - name: Retry
+          args:
+            retries: 2
+            statuses: BAD_GATEWAY,GATEWAY_TIMEOUT
+        - name: CircuitBreaker
+          args:
+            name: default
+            fallbackUri: forward:/fallback
