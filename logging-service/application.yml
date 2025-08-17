@@ -21,7 +21,7 @@ logging:
   
   export:
     file:
-      directory: ./logs/aggregated
+      directory: ${SHARED_LOG_PATH:-./logs}/aggregated
       format: json  # Options: json, structured, text
       rotation:
         enabled: true
