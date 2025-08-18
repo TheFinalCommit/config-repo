@@ -4,11 +4,51 @@ server:
 spring:
   application:
     name: api-gateway
+  cloud:
+    gateway:
+      server:
+        webflux:
+          routes:
+            - id: auth-service
+              uri: http://auth-service:8081
+              predicates:
+                - Path=/auth-service/**
+              filters:
+                - StripPrefix=1
+            - id: service-1
+              uri: http://service-1:8082
+              predicates:
+                - Path=/service-1/**
+              filters:
+                - StripPrefix=1
+            - id: service-2
+              uri: http://service-2:8083
+              predicates:
+                - Path=/service-2/**
+              filters:
+                - StripPrefix=1
+            - id: service-3
+              uri: http://service-3:8084
+              predicates:
+                - Path=/service-3/**
+              filters:
+                - StripPrefix=1
+            - id: logging-service
+              uri: http://logging-service:8086
+              predicates:
+                - Path=/logging-service/**
+              filters:
+                - StripPrefix=1
+            - id: messaging-service
+              uri: http://messaging-service:8085
+              predicates:
+                - Path=/messaging-service/**
+              filters:
+                - StripPrefix=1
 
 # Service registry for API Gateway - comma-separated string format
 gateway:
   public-paths: "/actuator/health,/actuator/info,/auth-service/api/v*/auth/login,/auth-service/api/v*/public/**,/auth-service/public/**,/service-1/api/v*/public/**,/service-1/public/**,/service-2/api/v*/public/**,/service-2/public/**,/service-3/api/v*/public/**,/service-3/public/**,/logging-service/api/v*/public/**,/messaging-service/api/v*/public/**,/api/v*/auth/login,/api/v*/public/**,/public/**"
-
   service-names:
     - "auth-service"
     - "service-1"
