@@ -1,0 +1,23 @@
+# Global no-vault configuration applied to all services when DISABLE_VAULT=yes
+# This file is automatically included when the no-vault profile is active
+
+spring:
+  config:
+    import: ""  # Disable any vault imports globally
+  cloud:
+    vault:
+      enabled: false  # Disable Vault integration for all services
+    config:
+      server:
+        vault:
+          enabled: false  # Disable Vault backend for config server
+
+management:
+  health:
+    vault:
+      enabled: false  # Disable Vault health checks for all services
+
+logging:
+  level:
+    org.springframework.vault: OFF  # Disable Vault logging globally
+    org.springframework.cloud.vault: OFF
