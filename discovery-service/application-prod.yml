@@ -1,3 +1,16 @@
+# Production configuration for discovery service
+eureka:
+  server:
+    # Enable self-preservation for production resilience
+    enable-self-preservation: true
+    eviction-interval-timer-in-ms: 60000
+    # Standard renewal threshold for production
+    renewal-percent-threshold: 0.85
+    # Wait time before enabling self-preservation
+    wait-time-in-ms-when-sync-empty: 300000  # 5 minutes
+    # Expected number of client renewals per minute
+    expected-client-renewal-interval-seconds: 30
+
 logging:
   level:
     com.netflix.eureka: WARN
