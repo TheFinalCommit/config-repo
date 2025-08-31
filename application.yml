@@ -36,7 +36,7 @@ eureka:
 management:
   endpoint:
     prometheus:
-      enabled: true
+      access: unrestricted  # Updated from deprecated 'enabled: true'
     health:
       probes:
         enabled: true   # Enable liveness/readiness
