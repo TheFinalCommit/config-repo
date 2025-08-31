@@ -85,3 +85,8 @@ app:
   logging:
     queue:
       capacity: 2000
+
+logging:
+  level:
+    org.apache.coyote.http11.Http11Processor: INFO  # Suppress DEBUG EOFException logs
+    org.apache.tomcat.util.net: INFO
