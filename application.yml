@@ -62,11 +62,17 @@ springdoc:
     path: /swagger-ui
   # springdoc config above; removed misplaced health.probes (moved under management)
 
-# Logging configuration - applies to all profiles
+# Standardized logging configuration - applies to all services and profiles
 logging:
+  file:
+    name: ${LOG_PATH:./logs}/${spring.application.name}.log
+  pattern:
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+    console: "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
   level:
     org.apache.coyote.http11.Http11Processor: INFO  # Suppress DEBUG EOFException logs
     org.apache.tomcat.util.net: INFO
+    org.springframework.cloud.config.client.ConfigServicePropertySourceLocator: WARN
 
 ---
 spring:
