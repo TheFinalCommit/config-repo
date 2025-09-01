@@ -7,9 +7,9 @@ spring:
   
   # RabbitMQ Configuration (shared across all services)
   rabbitmq:
-    host: ${RABBITMQ_HOST:localhost}
+    host: ${RABBITMQ_HOST:rabbitmq}
     port: ${RABBITMQ_PORT:5672}
-    username: ${RABBITMQ_USER:admin}
+    username: ${RABBITMQ_USER:guest}
     password: ${RABBITMQ_PASSWORD:secure_rabbit_password}
     virtual-host: ${RABBITMQ_VHOST:/}
     connection-timeout: 10s
