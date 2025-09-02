@@ -12,15 +12,10 @@ spring:
             issuer-uri: ${OAUTH2_ISSUER_URI:http://localhost:8081/}
             user-name-attribute: preferred_username
   
-  # Shared Spring Cloud Config import - eliminates duplication
-  config:
-    import: optional:configserver:${SPRING_CLOUD_CONFIG_URI:http://localhost:8888/}
-    retry:
-      max-attempts: ${CONFIG_RETRY_ATTEMPTS:6}
-      initial-interval: ${CONFIG_RETRY_INTERVAL:1000}
-      multiplier: ${CONFIG_RETRY_MULTIPLIER:1.1}
-      max-interval: ${CONFIG_RETRY_MAX_INTERVAL:2000}
-    fail-fast: ${CONFIG_FAIL_FAST:false}
+  # NOTE: Config import is handled per-service to avoid circular dependencies
+  # Each service includes this in their bootstrap.yml or application.yml:
+  # config:
+  #   import: optional:configserver:${SPRING_CLOUD_CONFIG_URI:http://localhost:8888/}
   
   # RabbitMQ Configuration (shared across all services)
   rabbitmq:
