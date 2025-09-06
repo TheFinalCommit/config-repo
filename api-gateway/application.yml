@@ -23,37 +23,37 @@ spring:
         webflux:
           routes:
             - id: auth-service
-              uri: http://auth-service:8081
+              uri: ${AUTH_SERVICE_URL:http://auth-service:8081}
               predicates:
                 - Path=/auth-service/**
               filters:
                 - StripPrefix=1
             - id: service-1
-              uri: http://service-1:8082
+              uri: ${SERVICE1_URL:http://service-1:8082}
               predicates:
                 - Path=/service-1/**
               filters:
                 - StripPrefix=1
             - id: service-2
-              uri: http://service-2:8083
+              uri: ${SERVICE2_URL:http://service-2:8083}
               predicates:
                 - Path=/service-2/**
               filters:
                 - StripPrefix=1
             - id: service-3
-              uri: http://service-3:8084
+              uri: ${SERVICE3_URL:http://service-3:8084}
               predicates:
                 - Path=/service-3/**
               filters:
                 - StripPrefix=1
             - id: logging-service
-              uri: http://logging-service:8086
+              uri: ${LOGGING_SERVICE_URL:http://logging-service:8086}
               predicates:
                 - Path=/logging-service/**
               filters:
                 - StripPrefix=1
             - id: messaging-service
-              uri: http://messaging-service:8085
+              uri: ${MESSAGING_SERVICE_URL:http://messaging-service:8085}
               predicates:
                 - Path=/messaging-service/**
               filters:
