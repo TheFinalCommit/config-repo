@@ -11,6 +11,7 @@ Can be:
 config-repo/
   application.yml                # Global defaults (all services / profiles)
   application-<profile>.yml      # Profile-wide overrides (e.g. dev, prod, local)
+  application-performance.yml    # Performance optimizations (caching, resilience, monitoring)
   <service-name>/application.yml # Service-specific overrides
   <service-name>/application-<profile>.yml (optional)
 ```
@@ -67,6 +68,29 @@ git submodule add <git-url> config-repo
 
 ## Vault Integration
 When Vault is enabled (dev/prod profiles default), placeholders like `${vault.secret.microservices.jwt.secret}` are resolved automatically by Spring Cloud and not stored here in plain text.
+
+## Performance Profile
+The `performance` profile (`application-performance.yml`) provides optimized settings for production workloads:
+
+**Included optimizations:**
+- **Caching**: Caffeine cache configuration for better response times
+- **Resilience4j**: Circuit breakers, retries, and timeouts for fault tolerance  
+- **Monitoring**: Enhanced metrics with Prometheus integration and percentiles
+- **Eureka**: Optimized registry fetch intervals for faster service discovery
+- **Logging**: Reduced verbosity for better performance
+
+**Usage:**
+```bash
+# Enable performance optimizations
+make start-performance PROFILE=prod
+
+# Or combine with other profiles
+SPRING_PROFILES_ACTIVE=prod,performance make start
+
+# In docker-compose override
+environment:
+  - SPRING_PROFILES_ACTIVE=prod,performance
+```
 
 ## Recommendations
 - Keep sensitive values only in Vault; never commit real secrets.
