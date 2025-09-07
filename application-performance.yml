@@ -1,0 +1,79 @@
+# Performance-optimized configuration for all services
+# PERF: Agent-Infra - Global performance tuning configuration
+
+# PERF: Agent-Data - Add caching configuration for better performance
+spring:
+  cache:
+    type: caffeine
+    caffeine:
+      spec: maximumSize=1000,expireAfterWrite=300s,expireAfterAccess=300s
+  # PERF: Agent-Data - Optimize HTTP client settings globally
+  http:
+    client:
+      timeout: 10s
+      connection-timeout: 5s
+
+# PERF: Agent-Infra - Optimize Eureka client performance
+eureka:
+  client:
+    # Optimize registry fetch intervals for better performance
+    registryFetchIntervalSeconds: 10
+    instanceInfoReplicationIntervalSeconds: 10
+  instance:
+    # Optimize instance lease renewal for faster failover
+    leaseRenewalIntervalInSeconds: 10
+    leaseExpirationDurationInSeconds: 30
+
+# PERF: Agent-Infra - Enhanced monitoring and metrics for performance tracking
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,gateway,prometheus,caches
+  metrics:
+    export:
+      prometheus:
+        enabled: ${METRICS_PROMETHEUS_ENABLED:true}
+    distribution:
+      percentiles-histogram:
+        http.server.requests: true
+      percentiles:
+        http.server.requests: 0.5,0.95,0.99
+      slo:
+        http.server.requests: 50ms,100ms,200ms,300ms,500ms,1s
+
+# PERF: Agent-Core - Optimized resilience configuration
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 30s
+        sliding-window-size: 10
+        minimum-number-of-calls: 5
+        slow-call-rate-threshold: 60
+        slow-call-duration-threshold: 2s
+  retry:
+    configs:
+      default:
+        max-attempts: 3
+        wait-duration: 500ms
+        exponential-backoff-multiplier: 2
+        randomized-wait-factor: 0.5
+  timelimiter:
+    configs:
+      default:
+        timeout-duration: 3s
+
+# PERF: Agent-Infra - Optimized logging configuration
+logging:
+  level:
+    # Reduce verbose logging for better performance
+    org.springframework.web.reactive: INFO
+    org.springframework.cloud.gateway: INFO
+    io.github.resilience4j: INFO
+    reactor.netty.http.client: INFO
+    com.netflix.eureka: ${EUREKA_LOG_LEVEL:WARN}
+    com.netflix.discovery: WARN
+  pattern:
+    console: "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
