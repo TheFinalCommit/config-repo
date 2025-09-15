@@ -26,7 +26,7 @@ spring:
     virtual-host: ${RABBITMQ_VHOST:/}
     connection-timeout: 10s
     requested-heartbeat: 30s
-    publisher-confirms: true
+    publisher-confirm-type: correlated
     publisher-returns: true
     template:
       retry:
@@ -44,7 +44,8 @@ spring:
       password: ${REDIS_PASSWORD:secure_redis_password}
       database: 0
       timeout: 2000ms
-      ssl: ${REDIS_SSL:false}
+      ssl:
+        enabled: ${REDIS_SSL:false}
       lettuce:
         pool:
           max-active: 8
@@ -111,8 +112,9 @@ management:
         http.server.requests: 0.5, 0.9, 0.95, 0.99, 0.999
       sla:
         http.server.requests: 50ms, 100ms, 200ms, 500ms
-    export:
-      prometheus:
+  prometheus:
+    metrics:
+      export:
         enabled: true
         step: 30s
         descriptions: true

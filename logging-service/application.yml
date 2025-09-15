@@ -7,6 +7,11 @@ spring:
 
 # Logging service configuration
 logging:
+  level:
+    org.springframework.amqp: INFO
+    org.apache.http: WARN
+    org.springframework.cloud.netflix.eureka: WARN
+    com.netflix.discovery: INFO
   ingestion:
     queue:
       capacity: 5000
@@ -29,4 +34,3 @@ logging:
         maxFiles: 30
       compression:
         enabled: true
-

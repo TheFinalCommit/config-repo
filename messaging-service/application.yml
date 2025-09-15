@@ -4,3 +4,11 @@ server:
 spring:
   application:
     name: messaging-service
+
+# Messaging service configuration
+logging:
+  level:
+    org.springframework.amqp: INFO
+    org.apache.http: WARN
+    org.springframework.cloud.netflix.eureka: WARN
+    com.netflix.discovery: INFO
