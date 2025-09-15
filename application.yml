@@ -22,7 +22,7 @@ spring:
     host: ${RABBITMQ_HOST:rabbitmq}
     port: ${RABBITMQ_PORT:5672}
     username: ${RABBITMQ_USER:admin}
-    password: ${RABBITMQ_PASSWORD:secure_rabbit_password}
+    password: ${RABBITMQ_PASSWORD:secure_rabbit_password-CHANGE-ME}
     virtual-host: ${RABBITMQ_VHOST:/}
     connection-timeout: 10s
     requested-heartbeat: 30s
@@ -41,7 +41,7 @@ spring:
     redis:
       host: ${REDIS_HOST:redis}
       port: ${REDIS_PORT:6379}
-      password: ${REDIS_PASSWORD:secure_redis_password}
+      password: ${REDIS_PASSWORD:secure_redis_password-CHANGE-ME}
       database: 0
       timeout: 2000ms
       ssl:
