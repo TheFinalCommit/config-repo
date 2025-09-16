@@ -47,15 +47,16 @@ spring:
               filters:
                 - StripPrefix=1
             - id: logging-service
-              uri: ${LOGGING_SERVICE_URL:http://logging-service:8086}
               predicates:
-                - Path=/logging-service/**
+                - Path=/logging/**
+              uri: ${LOGGING_SERVICE_URL:http://logging-service:8085}
               filters:
                 - StripPrefix=1
+            # Messaging Service Route
             - id: messaging-service
-              uri: ${MESSAGING_SERVICE_URL:http://messaging-service:8085}
               predicates:
-                - Path=/messaging-service/**
+                - Path=/messaging/**
+              uri: ${MESSAGING_SERVICE_URL:http://messaging-service:8086}
               filters:
                 - StripPrefix=1
 
