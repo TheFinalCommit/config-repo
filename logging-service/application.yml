@@ -4,6 +4,31 @@ server:
 spring:
   application:
     name: logging-service
+  cloud:
+    stream:
+      bindings:
+        log-input:
+          destination: logs.structured
+          group: logging-service
+          consumer:
+            auto-startup: true
+        log-output:
+          destination: logs.structured
+      rabbit:
+        bindings:
+          log-input:
+            consumer:
+              auto-bind-dlq: true
+              durableSubscription: true
+              acknowledge-mode: auto
+        default:
+          consumer:
+            auto-declare: true
+            declare-exchange: true
+            declare-queue: true
+          producer:
+            auto-declare: true
+            declare-exchange: true
 
 # Logging service configuration
 logging:
