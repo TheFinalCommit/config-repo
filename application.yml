@@ -56,12 +56,12 @@ spring:
   #   import: optional:configserver:${SPRING_CLOUD_CONFIG_URI:http://localhost:8888/}
   
   # RabbitMQ Configuration (shared across all services)
-  # Uses infrastructure service names and Vault secrets
+  # Uses infrastructure service names and environment variables
   rabbitmq:
     host: rabbitmq  # Infrastructure service name
     port: 5672      # Standard port
-    username: ${rabbitmq.username}  # From Vault
-    password: ${rabbitmq.password}  # From Vault
+    username: ${RABBITMQ_USER}  # From environment
+    password: ${RABBITMQ_PASSWORD}  # From environment
     virtual-host: /
     connection-timeout: 10s
     requested-heartbeat: 30s
@@ -76,12 +76,12 @@ spring:
         multiplier: 2
   
   # Enhanced Redis Configuration
-  # Uses infrastructure service names and Vault secrets
+  # Uses infrastructure service names and environment variables
   data:
     redis:
       host: redis     # Infrastructure service name
       port: 6379      # Standard port
-      password: ${redis.password}  # From Vault
+      password: ${REDIS_PASSWORD}  # From environment
       database: 0
       timeout: 2000ms
       ssl:
