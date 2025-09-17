@@ -5,9 +5,6 @@ spring:
   application:
     name: api-gateway
   
-  # Redis configuration inherited from global application.yml
-  # Uses Vault secrets: ${redis.password}
-  
   cloud:
     gateway:
       server:
