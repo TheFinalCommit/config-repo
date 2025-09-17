@@ -1,15 +1,53 @@
+# =============================================================================
+# Spring Cloud Config - Application Configuration
+# =============================================================================
+# This file contains APPLICATION-LEVEL configuration shared across all services.
+# 
+# CONFIGURATION SEPARATION STRATEGY:
+# 
+# 1. Infrastructure Bootstrap (.env files):
+#    - Docker image versions and infrastructure startup
+#    - Bootstrap credentials for container startup only
+#    - Network and platform configuration
+#    - Used by: Docker Compose and Makefile
+#
+# 2. Application Configuration (this file):
+#    - Business logic and application behavior
+#    - Service integration patterns (OAuth, service discovery)
+#    - Shared application defaults (connection pools, timeouts)
+#    - Uses Vault references for runtime secrets
+#
+# 3. Runtime Secrets (HashiCorp Vault):
+#    - Production credentials and sensitive data
+#    - Dynamic secret rotation and access control
+#    - Integration through Spring Cloud Vault
+#
+# VAULT SECRET PATHS (configured in Vault):
+# - database.username    -> secret/database/username
+# - database.password    -> secret/database/password  
+# - rabbitmq.username    -> secret/rabbitmq/username
+# - rabbitmq.password    -> secret/rabbitmq/password
+# - redis.password       -> secret/redis/password
+#
+# PROFILE USAGE:
+# - local,native         -> Filesystem config, no Vault
+# - dev,native,vault     -> Filesystem config + Vault secrets
+# - dev,vault           -> Git config + Vault secrets
+# - prod,vault,performance -> Production Git config + Vault + optimizations
+# =============================================================================
+
 spring:
   # Enhanced Security Configuration (shared across all services)
   security:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: ${OAUTH2_ISSUER_URI:http://localhost:8081/}
+          issuer-uri: ${OAUTH2_ISSUER_URI:http://auth-service:8081/}
           cache-duration: ${JWT_CACHE_DURATION:PT5M}
       client:
         provider:
           custom:
-            issuer-uri: ${OAUTH2_ISSUER_URI:http://localhost:8081/}
+            issuer-uri: ${OAUTH2_ISSUER_URI:http://auth-service:8081/}
             user-name-attribute: preferred_username
   
   # NOTE: Config import is handled per-service to avoid circular dependencies
@@ -18,12 +56,13 @@ spring:
   #   import: optional:configserver:${SPRING_CLOUD_CONFIG_URI:http://localhost:8888/}
   
   # RabbitMQ Configuration (shared across all services)
+  # Uses infrastructure service names and Vault secrets
   rabbitmq:
-    host: ${RABBITMQ_HOST:rabbitmq}
-    port: ${RABBITMQ_PORT:5672}
-    username: ${RABBITMQ_USER:admin}
-    password: ${RABBITMQ_PASSWORD:secure_rabbit_password-CHANGE-ME}
-    virtual-host: ${RABBITMQ_VHOST:/}
+    host: rabbitmq  # Infrastructure service name
+    port: 5672      # Standard port
+    username: ${rabbitmq.username}  # From Vault
+    password: ${rabbitmq.password}  # From Vault
+    virtual-host: /
     connection-timeout: 10s
     requested-heartbeat: 30s
     publisher-confirm-type: correlated
@@ -37,15 +76,16 @@ spring:
         multiplier: 2
   
   # Enhanced Redis Configuration
+  # Uses infrastructure service names and Vault secrets
   data:
     redis:
-      host: ${REDIS_HOST:redis}
-      port: ${REDIS_PORT:6379}
-      password: ${REDIS_PASSWORD:secure_redis_password-CHANGE-ME}
+      host: redis     # Infrastructure service name
+      port: 6379      # Standard port
+      password: ${redis.password}  # From Vault
       database: 0
       timeout: 2000ms
       ssl:
-        enabled: ${REDIS_SSL:false}
+        enabled: false
       lettuce:
         pool:
           max-active: 8
@@ -54,8 +94,13 @@ spring:
           min-idle: 0
         shutdown-timeout: 100ms
   
-  # Database Connection Pool Defaults (override per service)
+  # Database Configuration (for services that use database)
+  # Uses infrastructure service names and Vault secrets
   datasource:
+    url: jdbc:postgresql://postgres:5432/microservices_db  # Infrastructure service name
+    username: ${database.username}  # From Vault
+    password: ${database.password}  # From Vault
+    driver-class-name: org.postgresql.Driver
     hikari:
       connection-timeout: 20000
       maximum-pool-size: 10
@@ -63,6 +108,25 @@ spring:
       idle-timeout: 300000
       max-lifetime: 1200000
       leak-detection-threshold: 60000
+  
+  # Enhanced JPA Configuration
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: ${DDL_AUTO:update}
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    show-sql: ${SHOW_SQL:false}
+    properties:
+      hibernate:
+        format_sql: true
+        use_sql_comments: true
+        jdbc:
+          batch_size: 20
+          order_inserts: true
+          order_updates: true
+        connection:
+          provider_disables_autocommit: true
           
 eureka:
   client:

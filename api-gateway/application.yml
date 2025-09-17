@@ -4,19 +4,10 @@ server:
 spring:
   application:
     name: api-gateway
-  data:
-    redis:
-      host: ${REDIS_HOST:redis}
-      port: ${REDIS_PORT:6379}
-      password: ${REDIS_PASSWORD:secure_redis_password-CHANGE-ME}
-      database: 0
-      timeout: 2000ms
-      lettuce:
-        pool:
-          max-active: 8
-          max-wait: -1ms
-          max-idle: 8
-          min-idle: 0
+  
+  # Redis configuration inherited from global application.yml
+  # Uses Vault secrets: ${redis.password}
+  
   cloud:
     gateway:
       server:
