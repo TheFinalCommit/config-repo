@@ -10,5 +10,5 @@ logging:
   level:
     org.springframework.amqp: INFO
     org.apache.http: WARN
-    org.springframework.cloud.netflix.eureka: WARN
-    com.netflix.discovery: INFO
+    org.springframework.cloud.consul: WARN
+    com.ecwid.consul: INFO

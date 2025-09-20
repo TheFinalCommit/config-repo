@@ -1,17 +1,17 @@
 # Production configuration for discovery service
-eureka:
-  server:
-    # Enable self-preservation for production resilience
-    enable-self-preservation: true
-    eviction-interval-timer-in-ms: 60000
-    # Standard renewal threshold for production
-    renewal-percent-threshold: 0.85
-    # Wait time before enabling self-preservation
-    wait-time-in-ms-when-sync-empty: 300000  # 5 minutes
-    # Expected number of client renewals per minute
-    expected-client-renewal-interval-seconds: 30
+spring:
+  cloud:
+    consul:
+      discovery:
+        # Production-optimized settings
+        health-check-interval: 30s
+        health-check-timeout: 10s
+        health-check-critical-timeout: 60s
+        # Production reliability settings
+        prefer-ip-address: true
+        query-passing: true
 
 logging:
   level:
-    com.netflix.eureka: WARN
-    com.netflix.discovery: WARN
+    org.springframework.cloud.consul: WARN
+    com.ecwid.consul: WARN

@@ -55,6 +55,23 @@ spring:
   # config:
   #   import: optional:configserver:${SPRING_CLOUD_CONFIG_URI:http://localhost:8888/}
   
+  # Spring Cloud Consul Configuration
+  cloud:
+    consul:
+      host: ${CONSUL_HOST:consul}
+      port: ${CONSUL_PORT:8500}
+      discovery:
+        register: true
+        health-check-interval: 10s
+        health-check-timeout: 5s
+        health-check-critical-timeout: 30s
+        prefer-ip-address: true
+        service-name: ${spring.application.name}
+        instance-id: ${spring.application.name}:${server.port}
+        tags:
+          - version=${spring.application.version:unknown}
+          - environment=${spring.profiles.active:default}
+  
   # RabbitMQ Configuration (shared across all services)
   # Uses infrastructure service names and environment variables
   rabbitmq:
@@ -127,11 +144,6 @@ spring:
           order_updates: true
         connection:
           provider_disables_autocommit: true
-          
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: ${EUREKA_DEFAULT_ZONE:http://discovery-service:8761/eureka/}
 
 management:
   endpoint:

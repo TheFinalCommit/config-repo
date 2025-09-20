@@ -136,7 +136,7 @@ The `performance` profile (`application-performance.yml`) provides optimized set
 
 - **Caching**: Caffeine cache configuration for better response times
 - **Connection Pools**: Optimized Hikari and Lettuce pool settings
-- **Service Discovery**: Faster Eureka intervals for quicker failover
+- **Service Discovery**: Faster Consul health check intervals for quicker failover
 - **Monitoring**: Enhanced metrics and health check configurations
 
 ## 🏷️ **Profile Strategy**
@@ -185,7 +185,7 @@ The `performance` profile (`application-performance.yml`) provides optimized set
 - Ensure infrastructure started before application services
 - **Resilience4j**: Circuit breakers, retries, and timeouts for fault tolerance  
 - **Monitoring**: Enhanced metrics with Prometheus integration and percentiles
-- **Eureka**: Optimized registry fetch intervals for faster service discovery
+- **Consul**: Optimized health check intervals for faster service discovery
 - **Logging**: Reduced verbosity for better performance
 
 **Usage:**

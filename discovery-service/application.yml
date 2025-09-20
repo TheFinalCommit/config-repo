@@ -4,11 +4,15 @@ server:
 spring:
   application:
     name: discovery-service
-
-# Core Eureka server configuration
-eureka:
-  client:
-    register-with-eureka: false
-    fetch-registry: false
-    service-url:
-      defaultZone: ${EUREKA_CLIENT_SERVICE_URL:http://localhost:8761/eureka/}
+  cloud:
+    consul:
+      host: ${CONSUL_HOST:consul}
+      port: ${CONSUL_PORT:8500}
+      discovery:
+        register: true
+        health-check-interval: 10s
+        health-check-timeout: 5s
+        health-check-critical-timeout: 30s
+        prefer-ip-address: true
+        service-name: ${spring.application.name}
+        instance-id: ${spring.application.name}:${server.port}

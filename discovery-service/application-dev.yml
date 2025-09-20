@@ -1,14 +1,15 @@
 # Development overrides for discovery service
-eureka:
-  server:
-    # Disable self-preservation for development
-    enable-self-preservation: false
-    eviction-interval-timer-in-ms: 5000
-    # Lower renewal threshold for dev with fewer services
-    renewal-percent-threshold: 0.3
+spring:
+  cloud:
+    consul:
+      discovery:
+        # Development-specific settings
+        health-check-interval: 5s
+        health-check-timeout: 3s
+        health-check-critical-timeout: 15s
 
 logging:
   level:
-    com.netflix.eureka: DEBUG
-    com.netflix.discovery: DEBUG
+    org.springframework.cloud.consul: DEBUG
+    com.ecwid.consul: DEBUG
 

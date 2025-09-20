@@ -12,17 +12,17 @@ spring:
     client:
       timeout: 10s
       connection-timeout: 5s
-
-# PERF: Agent-Infra - Optimize Eureka client performance
-eureka:
-  client:
-    # Optimize registry fetch intervals for better performance
-    registryFetchIntervalSeconds: 10
-    instanceInfoReplicationIntervalSeconds: 10
-  instance:
-    # Optimize instance lease renewal for faster failover
-    leaseRenewalIntervalInSeconds: 10
-    leaseExpirationDurationInSeconds: 30
+  # PERF: Agent-Infra - Optimize Consul client performance  
+  cloud:
+    consul:
+      discovery:
+        # Optimize health check intervals for better performance
+        health-check-interval: 10s
+        health-check-timeout: 5s
+        health-check-critical-timeout: 30s
+        # Performance optimizations
+        query-passing: true
+        prefer-ip-address: true
 
 # PERF: Agent-Infra - Enhanced monitoring and metrics for performance tracking
 management:
@@ -73,7 +73,7 @@ logging:
     org.springframework.cloud.gateway: INFO
     io.github.resilience4j: INFO
     reactor.netty.http.client: INFO
-    com.netflix.eureka: ${EUREKA_LOG_LEVEL:WARN}
-    com.netflix.discovery: WARN
+    org.springframework.cloud.consul: ${CONSUL_LOG_LEVEL:WARN}
+    com.ecwid.consul: WARN
   pattern:
     console: "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
